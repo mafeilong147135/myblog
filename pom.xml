@@ -16,6 +16,16 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<!-- docker打包相关 -->
+		<!--maven打包为镜像的插件版本-->
+		<docker-maven-plugin.version>1.2.0</docker-maven-plugin.version>
+		<!-- docker容器 默认端口 默认激活环境 也可以在docker启动时指定 -->
+		<docker.default.port>8761</docker.default.port>
+		<docker.default.profiles>prod8761</docker.default.profiles>
+		<!-- docker的默认java启动参数 对应docker中的参数JAVA_OPTIONS 也可以在docker启动时指定 -->
+		<docker.default.java.options>-Xms64m -Xmx256m</docker.default.java.options>
+		<!-- resource.delimiter可以修改Dockerfile文件对参数的读取的符号 -->
+		<resource.delimiter>$</resource.delimiter>
 	</properties>
 
 	<dependencies>
@@ -129,6 +139,22 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>${docker-maven-plugin.version}</version>
+				<configuration>
+					<imageName>${project.name}:${project.version}</imageName>
+					<dockerDirectory>${project.build.directory}/docker</dockerDirectory>
+					<resources>
+						<resource>
+							<targetPath>/</targetPath>
+							<directory>${project.build.directory}</directory>
+							<include>${project.build.finalName}.jar</include>
+						</resource>
+					</resources>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
