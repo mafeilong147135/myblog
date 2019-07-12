@@ -1,0 +1,33 @@
+FROM java:8-jre-alpine
+
+MAINTAINER mfl mfl147135@163.com
+
+# 环境变量
+ENV WORK_PATH /
+
+ENV APP_NAME @project.build.finalName@.jar
+
+ENV PROFILES @docker.default.profiles@
+
+ENV PORT @docker.default.port@
+
+ENV JAVA_OPTIONS @docker.default.java.options@
+
+EXPOSE $PORT
+
+# USER
+#USER user:group
+
+# VOLUME
+VOLUME ["/export"]
+# ADD
+
+# COPY
+COPY $APP_NAME $WORK_PATH
+WORKDIR $WORK_PATH
+
+# CMD ["java", "-version"]
+ENTRYPOINT ["/bin/sh", "-c", "java $JAVA_OPTIONS -Dspring.profiles.active=$PROFILES -jar $WORK_PATH$APP_NAME"]
+
+# CMD
+# CMD ["-jar", "$project.build.finalName$.@project.packaging@"]

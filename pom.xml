@@ -24,8 +24,8 @@
 		<docker.default.profiles>prod8761</docker.default.profiles>
 		<!-- docker的默认java启动参数 对应docker中的参数JAVA_OPTIONS 也可以在docker启动时指定 -->
 		<docker.default.java.options>-Xms64m -Xmx256m</docker.default.java.options>
-		<!-- resource.delimiter可以修改Dockerfile文件对参数的读取的符号 -->
-		<resource.delimiter>$</resource.delimiter>
+		<!-- resource.delimiter可以修改Dockerfile文件对参数的读取的符号 默认为@ -->
+		<!--<resource.delimiter>$</resource.delimiter>-->
 	</properties>
 
 	<dependencies>
@@ -39,10 +39,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-		<dependency>
+<!--		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity4</artifactId>
-		</dependency>
+		</dependency>-->
 		<!-- web模块 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -135,7 +135,7 @@
 	</dependencies>
 
 	<build>
-		<plugins>
+<!--<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -155,6 +155,12 @@
 						</resource>
 					</resources>
 				</configuration>
+			</plugin>
+		</plugins>-->
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
