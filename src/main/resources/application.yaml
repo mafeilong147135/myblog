@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path: /myblog
-  port: 80
+  port: 8080
 
 # 数据库连接 mysql
 spring:
@@ -45,9 +45,13 @@ spring:
     useGlobalDataSourceStat: true
     # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  thymeleaf:
+    cache: false
 logging:
   config: classpath:logback-spring.xml
   level:
      dao: debug
      org:
         mybatis: info
+# mybatis:
+  # config-location: classpath:/mybatis-config.xml
