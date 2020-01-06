@@ -11,15 +11,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @Api(value = "LoginController", tags = "用户登录LoginController", description = "用户登录LoginController")
+@RequestMapping("/user")
 public class LoginController {
+
     private Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @RequestMapping("/")
     public String showHome() {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         logger.info("当前登陆用户：" + name);
-
-        return "home.html";
+        return "index.html";
     }
 
     @RequestMapping("/login")

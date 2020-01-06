@@ -1,16 +1,31 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>SpringBoot登录测试</title>
-        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-    </head>
-    <body>
-        <form th:action="@{/login}" method="post" >
-            <input th:text="用户名" type="text" name="username" />
-            <input th:text="密码" type="password" name="password" />
-            <button type="submit" >提交</button>
-            <!-- ${session?.SPRING_SECURITY_LAST_EXCEPTION?.message} security自带的错误提示信息 -->
-            <p th:if="${param.error}" th:text="${session?.SPRING_SECURITY_LAST_EXCEPTION?.message}" ></p>
-        </form>
-    </body>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <form th:action="@{/login}" method="post">
+        <span th:if="${error}" th:text="${msg}" style="color: red"></span>
+        <br>
+        <label>
+            用户名:
+            <input name="username" type="text">
+        </label>
+        <br>
+        <label>
+            密码:
+            <input name="password" type="password">
+        </label>
+        <br>
+        <div>
+            <label><input type="checkbox" name="remember-me"/>自动登录</label>
+            <button type="submit">立即登陆</button>
+        </div>
+    </form>
+</div>
+</body>
 </html>

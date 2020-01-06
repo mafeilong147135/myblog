@@ -1,10 +1,14 @@
 package com.mfl.myblog.config;
 
+import com.mfl.myblog.service.security.CustomUserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
@@ -12,24 +16,27 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private static final Logger logger = LoggerFactory.getLogger(WebSecurityConfig.class);
+    @Autowired
+    private CustomUserDetailsService userService;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.formLogin()
-                .loginPage("/login")
-                //设置登录成功跳转页面，error=true控制页面错误信息的展示
-                .successForwardUrl("/index")
-                .failureUrl("/login?error=true")
-                .permitAll() // 当需要用户登录的时候，要去的登录页面
+        http.authorizeRequests()
+                // 如果有允许匿名的url，填在下面
+                .anyRequest().authenticated()
                 .and()
-                .authorizeRequests().antMatchers("/test").permitAll()
-                .anyRequest() // 定义哪些URL需要被保护，哪些不需要被保护 任何请求登录后都可以访问
-                .authenticated()
+                // 设置登陆页
+                .formLogin().loginPage("/login")
+                // 设置登陆成功页
+                .defaultSuccessUrl("/").permitAll()
+                // 登录失败Url
+                .failureUrl("/login/error")
                 .and()
-                .csrf().disable();
-        //session管理,失效后跳转
-        http.sessionManagement().invalidSessionUrl("/login");
+                .logout().permitAll()
+                // 自动登录
+                .and().rememberMe();
+        // 关闭CSRF跨域
+        http.csrf().disable();
         //单用户登录，如果有一个登录了，同一个用户在其他地方不能登录
         http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(true);
         //退出时情况cookies
@@ -41,4 +48,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //
         http.addFilterBefore(filter, CsrfFilter.class);
     }
+
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        //inMemoryAuthentication 从内存中获取
+        auth.userDetailsService(userService).passwordEncoder(new BCryptPasswordEncoder());
+    }
 }
+
